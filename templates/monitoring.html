@@ -1,0 +1,51 @@
+<form class="form" id="diagnosis">
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="tipo_seguimiento">Tipo de Seguimiento</label>
+			<select id="tipo_seguimiento" name="motivo_consulta" class="form-control">
+				<option selected value="0">Choose...</option>
+				<option value="1">Diabetico</option>
+				<option value="2">Anamnesis</option>
+			</select>
+		</div>
+		<div class="form-group col-md-2">
+		</div>
+	</div>
+</form>
+<div id="container">
+	
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+
+<script type="text/javascript">
+	var url = "http://127.0.0.1:5000/";
+
+	$(document).ready(function(){
+
+		$("#tipo_seguimiento").on("click", function(ev){
+			ev.preventDefault();
+			var tipo = $("#tipo_seguimiento").val();
+			
+			if(tipo == 1){
+				$("#container").load(url + 'monitoring_d', {}, function(response, status, xhr){
+					if(status == "error"){
+						var msg = "Error!, algo ha sucedido: ";
+		        		$("#container").html(msg + xhr.status + " " + xhr.statusText);
+					}
+
+				});
+			}
+			else if(tipo == 2){
+				$("#container").load(url + 'monitoring_pre', {}, function(response, status, xhr){
+					if(status == "error"){
+						var msg = "Error!, algo ha sucedido: ";
+		        		$("#container").html(msg + xhr.status + " " + xhr.statusText);
+					}
+
+				});
+			}
+		});
+	})
+
+</script>

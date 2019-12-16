@@ -1,0 +1,199 @@
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Sofanet</title>
+
+	<!-- Bootstrap core CSS-->
+	<link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+	<!-- Custom fonts for this template-->
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='css/mystyles.css')}}" rel="stylesheet">
+
+</head>
+<body>
+<form class="form" id="diagnosis">
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="glucosa">Nivel de Glucosa</label>
+			<input type="text" class="form-control" id="glucosa" placeholder="Glucosa">
+		</div>
+		<div class="form-group col-md-6">
+			<label for="presion">Presión Sanguinea Distolica</label>
+			<input type="text" class="form-control" id="presion" placeholder="Presión Sanguinea Distolica(mm Hg)">
+		</div>	
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-4">
+			<label for="insulina">Insulina</label>
+			<input type="text" class="form-control" id="insulina" placeholder="Insulina (mu U/ml)">
+		</div>
+		<div class="form-group col-md-4">
+			<label for="masa">Masa Corporal</label>
+			<input type="text" class="form-control" id="masa" placeholder="Masa corporal(kg)">
+		</div>
+		<div class="form-group col-md-4">
+			<label for="estatura">Estatura</label>
+			<input type="text" class="form-control" id="estatura" placeholder="Estatura (m)">
+		</div>		
+	</div>
+	<button id="btnDiagnosis" class="btn btn-chulo">Diagnostico</button>
+</form>
+
+<!-- Result Modal-->
+<div class="modal fade" id="resultados_diagnosis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLabel">Resultados</h3>
+				<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body" id="body-modal1">
+				<canvas id="oilCanvas" width="400" height="600"></canvas>
+			</div>
+			<div class="modal-footer" id="footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+				<button class="btn btn-chulo" type="button" data-dismiss="modal">Aceptar</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+	<!-- Page level plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/chart.js/Chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/jquery.dataTables.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.js')}}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="{{url_for('static', filename='js/sb-admin.min.js')}}"></script>
+
+	<!-- Demo scripts for this page-->
+	<script src="{{url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+	<script src="{{url_for('static', filename='js/demo/chart-area-demo.js')}}"></script>
+	<script src="{{url_for('static', filename='js/Chart.bundle.js')}}"></script>
+	<script src="{{url_for('static', filename='js/Chart.js')}}"></script>
+
+<script type="text/javascript">
+	$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+    function cargarGrafico(valor1, valor2, resp1, resp2){
+
+    	var oilCanvas = document.getElementById("oilCanvas");
+    	Chart.defaults.global.defaultFontFamily = "Lato";
+		Chart.defaults.global.defaultFontSize = 18;
+
+		var oilData = {
+		    labels: [
+		        resp1,
+		        resp2,
+		    ],
+		    datasets: [
+		        {
+		            data: [valor1, valor2],
+		            backgroundColor: [
+		                "#2ec49d",
+		                "#eeeeee",
+		            ]
+		        }
+		    ]
+		};
+
+		var pieChart = new Chart(oilCanvas, {
+ 			type: 'pie',
+  			data: oilData
+  		});
+    }
+
+    function si(){
+    	$("#resultados_diagnosis").modal('hide');
+    }
+
+    function no(){
+    	$.getJSON($SCRIPT_ROOT + '/es_diabetico', {
+        
+        }, function(data){
+        	alert("Se ha invertido el diagnostico");
+        	$("#resultados_diagnosis").modal('hide');
+        });
+    }
+
+	$(document).ready(function(){
+
+		$("#btnDiagnosis").on("click", function(ev){
+			ev.preventDefault();
+			
+			var glucosa = $("#glucosa").val();
+			var presion = $("#presion").val();
+			var insulin = $("#insulina").val();
+			var masacor = $("#masa").val();
+			var estatura = $("#estatura").val();
+
+			if(glucosa == "" || presion == "" || insulin == "" || masacor == "" || estatura == ""){
+				    $("#body-modal1").html("");
+        			$("#body-modal1").html("<h5>"+"Tienes que llenar todos los campos"+"<h5>");
+        			$("#footer").empty();
+        			$("#footer").append('<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-chulo" type="button" data-dismiss="modal">Aceptar</button>');
+        			$("#resultados_diagnosis").modal('show');
+			}
+			else{
+				$.getJSON($SCRIPT_ROOT + '/save_diagnosis', {
+        			glucosa: glucosa,
+        			presion: presion,
+        			insulina: insulin,
+        			masacor: masacor,
+        			estatura: estatura
+        		}, function(data)
+        		{
+        			$("#glucosa").val("");
+        			$("#presion").val("");
+        			$("#insulina").val("");
+        			$("#masa").val("");
+        			$("#estatura").val("");
+
+        			if(data.error == ""){
+        				$("#body-modal1").empty();
+        				$("#body-modal1").append('<canvas id="oilCanvas" width="700" height="600"></canvas>');
+        				$("#body-modal1").append(data.html)
+        				$("#footer").empty();
+        				$("#footer").append('<h6>¿Esta de acuerdo con el resultado?</h6><button class="btn btn-secondary" onclick="no();" type="button" id="no">NO</button><button class="btn btn-chulo" type="button" onclick="si();" id="si">SI</button>');
+        				//$("#body-modal1").append('<div></div>');
+        				cargarGrafico(data.v1, data.v2, data.r1, data.r2);
+        			}
+        			else{
+        				$("#body-modal1").html("");
+        				$("#body-modal1").html("<h5>"+data.error+"</h5>");
+        				$("#footer").empty();
+        				$("#footer").append('<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button><button class="btn btn-chulo" type="button" data-dismiss="modal">Aceptar</button>');
+        			}
+        			$("#resultados_diagnosis").modal('show');
+        		});
+			}
+		});
+	})
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title >Sofanet</title>
+
+	<!-- Bootstrap core CSS-->
+	<link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+	<!-- Custom fonts for this template-->
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='css/mystyles.css')}}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+	<nav class="navbar navbar-expand  static-top" style="background-color: #2ec49d
+;">
+
+		<a class="navbar-brand mr-1" href="index.html" style="color:white;">SofaNet</a>
+
+		<button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+			<i class="fas fa-bars"></i>
+		</button>
+
+		<!-- Navbar Search -->
+		<form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+				<div class="input-group-append">
+					<button class="btn btn-chulo" type="button">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
+		</form>
+
+		<!-- Navbar -->
+		<ul class="navbar-nav ml-auto ml-md-0">
+			<li class="nav-item dropdown no-arrow">
+				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fas fa-user-circle fa-fw" style="color:white;"></i> <span style="color: white;">Dr. {{ session['username'] }}</span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+					<a class="dropdown-item" href="#">Configuración</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Salir</a>
+				</div>
+			</li>
+		</ul>
+
+	</nav>
+
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<ul class="sidebar navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="#" id="buscar" data-target="">
+					<i class="fas fa-search"></i>
+					<span>Buscar/Registrar Pac</span>
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a href="#" class="nav-link" id="pre-diagnosis">
+					<i class="fas fa-clipboard-check"></i>
+					<span>Anamnesis</span>
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a href="#" class="nav-link" id="diagnosis">
+					<i class="fas fa-clipboard-check"></i>
+					<span>Diagnostico</span>
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a href="#" class="nav-link" id="monitoring">
+					<i class="fas fa-clipboard"></i>
+					<span>Seguimiento</span>
+				</a>
+			</li>
+			<li class="nav-item active">
+				<a href="#" class="nav-link" id="monitoring_view">
+					<i class="fas fa-clipboard-list"></i>
+					<span>Ver Seguimiento</span>
+				</a>
+			</li>	
+		</ul>
+
+		<div id="content-wrapper">
+
+			<div class="container">
+				<div id="tabla_paciente">
+					
+				</div>
+
+				<div id="capa" class="">
+
+				</div>
+			</div>
+			<!-- /.container-fluid -->
+
+			<!-- Sticky Footer -->
+			<footer class="sticky-footer">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright © Sofanet 2018</span>
+					</div>
+				</div>
+			</footer>
+
+		</div>
+		<!-- /.content-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Desea salir?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Seleccione logout si esta listo para abandonar la sesion.</div>
+				<div class="modal-footer">
+					<button class="btn" type="button" data-dismiss="modal">Cancelar</button>
+					<a class="btn btn-chulo" href="/logout">Abandonar</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Modal consultar paciente-->
+	<div class="modal fade" id="consulta_paciente_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Buscar paciente</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="card-body" id="consulta_registro_modal1">
+						<form id="form-consulta" class="" method="POST" action="">
+							<div class="form-row">
+								<div class="form-group col-md-12">
+									<label for="cedula" class="sr-only">Cédula</label>
+									<input class="form-control" id="cedula" placeholder="Cédula de Identidad" name="cedula">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" id="btn_consulta_paciente" class="btn btn-chulo">Buscar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Modal Registrar Paciente-->
+
+	<div class="modal fade" id="registro_paciente_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel1">Registrar paciente</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="card-body" id="consulta_registro_modal2">
+						<form id="form-registro">
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="cedula_r">Cédula</label>
+									<input class="form-control" id="cedula_r" placeholder="Cédula" name="cedula_r">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="primer_nombre">Primer nombre</label>
+									<input class="form-control" id="primer_nombre" placeholder="Primer nombre">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="segundo_nombre">Segundo nombre</label>
+									<input type="text" class="form-control" id="segundo_nombre" placeholder="Segundo nombre" name = "segundo_nombre">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="primer_apellido">Primer apellido</label>
+									<input type="text" class="form-control" id="primer_apellido" placeholder="Primer apellido" name="primer_apellido">
+								</div>        
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="segundo_apellido">Segundo apellido</label>
+									<input type="text" class="form-control" id="segundo_apellido" name="segundo_apellido" placeholder="Segundo apellido">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="fecha_nacimiento">Fecha nacimiento</label>
+									<input type="text" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Fecha nacimiento">
+								</div>  
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-12">
+									<label for="direccion">Direccion</label>
+									<input type="text" class="form-control" id="direccion" name="direccion" placeholder="direccion">
+								</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-md-8">
+									<label for="telefono">Telefono</label>
+									<input type="text" class="form-control" id="telefono" name="telefono" placeholder="Telefono">
+								</div>
+								<div class="form-group col-md-4">
+									<label for="sexo">Sexo</label>
+									<select id="sexo" class="form-control">
+										<option selected>Choose...</option>
+										<option>Hombre</option>
+										<option>Mujer</option>
+									</select>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<button type="button" id="btn_registro_paciente" class="btn btn-chulo" data-backdrop="false" data-dismiss="modal">Registrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Bootstrap core JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+	<!-- Page level plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/chart.js/Chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/jquery.dataTables.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.js')}}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="{{url_for('static', filename='js/sb-admin.min.js')}}"></script>
+
+	<!-- Demo scripts for this page-->
+	<script src="{{url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+	<script src="{{url_for('static', filename='js/demo/chart-area-demo.js')}}"></script>
+
+	<script type="text/javascript">
+
+		$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		var capa_isempty = 1;
+		var cargo_pagina = 0;
+		var hay_paciente = 0;
+		var patient = 0
+
+		function mostrar_paciente(ced, nom, ape, sexo, edad, dir){
+			$("#tabla_paciente").empty();
+			$("#tabla_paciente").append('<div class="row" '+
+				'id="tabla_paciente"><div class="col-md-2 btn-chulo offset-md-10">'+
+    			''+nom+' '+ape+'</div></div></br></br>');
+		}
+
+		function sesion_paciente(){
+			$.getJSON($SCRIPT_ROOT + '/sesion_paciente', {
+
+			}, function(data){
+				if(data.isalive == 1){
+					mostrar_paciente(data.ci, data.nom, data.apell, data.sexo, "14", data.dir);
+				}else{
+
+				}
+			});
+		}
+
+		function get_session_patient(){
+			$.getJSON($SCRIPT_ROOT + '/get_session_patient', {
+
+			}, function(data){
+				patient = data.patient;
+			})
+		}
+
+		var url = "http://127.0.0.1:5000/";
+
+		$(document).ready(function(){
+			sesion_paciente();
+			myvar = setInterval(get_session_patient, 100);
+
+			$("#buscar").on("click", function(ev){
+				if(capa_isempty == 0){
+					capa_isempty = 1;
+					$("#capa").html("");
+					$("#consulta_paciente_modal").modal('show');
+					//location.reload();
+				}else{
+					
+					$("#consulta_paciente_modal").modal('show');
+				}
+			});
+
+	        $("#pre-diagnosis").on("click", function(ev){
+	        	
+	        	if(patient != 0){
+		        	$("#capa").load(url+"pre-diagnosis",{valor1:'primer valor', valor2:'segundo valor'}, function(response, status, xhr) {
+		        		if (status == "error") {
+		        			var msg = "Error!, algo ha sucedido: ";
+		        			$("#capa").html(msg + xhr.status + " " + xhr.statusText);
+		        		}
+		        		capa_isempty = 0;
+		        	});
+	        	}
+	        });
+
+
+	        $("#diagnosis").on("click", function(ev){
+	        	if(patient != 0){
+		        	$("#capa").load(url + "diagnosis", {}, function(response, status, xhr){
+
+		        		if(status == "error"){
+		        			var msg = "Error!, algo ha sucedido";
+		        			$("#capa").html(msg + xhr.status + " " + xhr.statusText);
+		        		}
+		        		capa_isempty = 0;
+		        	});
+		        }
+	        });
+
+	        $("#monitoring").on("click", function(ev){
+	        	if(patient != 0){
+		        	$("#capa").load(url + "monitoring", {}, function(responsive, status, xhr){
+
+		        		if(status == "error"){
+		        			var msg = "Error!, algo ha sucedido";
+		        			$("#capa").html(msg + xhr.status + " " + xhr.statusText);
+		        		}
+		        		capa_isempty = 0;		
+		        	});
+	        	}
+	        });
+
+	        $("#monitoring_view").on("click", function(ev){
+	        	if(patient != 0){
+		        	$("#capa").load(url + "monitoring_view", {}, function(responsive, status, xhr){
+
+		        		if(status == "error"){
+		        			var msg = "Error!, algo ha sucedido";
+		        			$("#capa").html(msg + xhr.status + " " + xhr.statusText);
+		        		}
+		        		capa_isempty = 0;		
+		        	});
+	        	}
+	        });
+
+	        $("#enfermedades").keypress(function(e){
+	        	if(e.which == 13)
+	        	{
+	        		e.preventDefault();
+	        		dis = $("#enfermedades").val();
+	        		$("#enfermedades").val("");
+
+	        		if(dis != "")
+	        		{
+	        			$("#lista_enfermedades").append('<li class="list-group-item">'+dis+'</li>');
+	        		}
+	        	}
+	        });
+
+	        // Formulario Diagnosis
+	        $("#btnDiagnosis").on("click", function(ev){
+	        	ev.preventDefault();
+	        	alert("Se puede");
+	        });
+
+	        // FORMULARIO ANAMNESIS
+
+	        $("#form-anamnesis").submit(function(e){
+	        	e.preventDefault();
+
+	        	var motivo = $("#motivo_consulta").val();
+	        	var enferm = $("#enfermedades").val();
+	        	var ant_pa = $("#ant_paciente").val();
+	        	var pa_dia = $("#padres_diab").val();
+	        	var ab_dia = $("#abuelos_diab").val();
+	        	var mu_dia = $("#murio_diab").val();
+	        	var f_alim = $("#formas_alimentarse").val();
+	        	var h_alim = $("#horario_alimentarse").val();
+	        	var sedent = $("#sedentarismo").val();
+	        	var alcoho = $("#alcohol").val();
+	        	var cafe = $("#cafe").val();
+	        	var drogas = $("#drogas").val();
+	        	alert(pa_dia);
+	        });
+
+	        $("#registro_paciente_modal").modal({show: false});
+	        $("#consulta_paciente_modal").modal({show: false});
+
+	        $("#btn_consulta_paciente").on("click" ,function(){
+	        	ced = $("#cedula").val();
+
+	        	if(ced != ""){
+	        		$.getJSON($SCRIPT_ROOT + '/consultar_paciente', {
+	        			cedula: ced  
+	        		}, function(data)
+	        		{
+	        			if(data.existe == 0)
+	        			{
+	        				$("#cedula").val("");
+	        				$("#consulta_paciente_modal").modal("hide");	        				
+	        				$("#cedula_r").val(data.cedula);
+	        				$("#registro_paciente_modal").modal("show");	
+	        			}
+	        			else
+	        			{
+	        				mostrar_paciente(data.cedula, data.nombre, data.apellido, data.sexo, data.edad, data.direccion);
+	        				$("#consulta_paciente_modal").modal("hide");
+	        				$("#tabla_paciente").show();
+	        				$("#cedula").val("");
+	        			}
+	        		});
+	        	}
+	        });
+
+	        $("#btn_registro_paciente").on("click", function(){
+
+	        	ced = $("#cedula_r").val();
+	        	p_nom = $("#primer_nombre").val();
+	        	s_nom = $("#segundo_nombre").val();
+	        	p_ape = $("#primer_apellido").val();
+	        	s_ape = $("#segundo_apellido").val();
+	        	fecha = $("#fecha_nacimiento").val();
+	        	dir = $("#direccion").val();
+	        	sexo = $("#sexo").val();
+	        	tel = $("#telefono").val();
+
+	        	if(ced!="" && p_nom!="" && p_ape!="" && fecha!="" && dir!="" && sexo!="" && tel!="")
+	        	{
+	        		$.getJSON($SCRIPT_ROOT + '/registrar_paciente', {
+	        			cedula: ced,
+	        			primer_nombre: p_nom,
+	        			segundo_nombre: s_nom,
+	        			primer_apellido: p_ape,
+	        			segundo_apellido: s_ape,
+	        			fecha_nacimiento: fecha,
+	        			direccion: dir,
+	        			sexo: sexo,
+	        			telefono: tel
+	        		}, function(data){
+
+	        			$("cedula_r").val("");
+	        			$("#primer_nombre").val("");
+	        			$("#segundo_nombre").val("");
+	        			$("#primer_apellido").val("");
+	        			$("#segundo_apellido").val("");
+	        			$("#fecha_nacimiento").val("");
+	        			$("#direccion").val("");
+	        			$("#sexo").val("");
+	        			$("#telefono").val("");
+
+	        			if(data.campos_vacios == 1)
+	        			{
+	        				alert("Faltan campos que llenar");
+	        			}
+	        			else if(data.existe == 1)
+	        			{
+	        				alert("Esta cedula ya esta registrada");
+	        			}
+	        			else if(data.existe == 0)
+	        			{
+	        				alert("Registro exitoso");
+	        				$("#registro_paciente_modal").modal("hide");
+	        			}
+	        		});
+	        	}
+	        });
+      	})
+
+    </script>
+
+  </body>
+
+  </html>
+

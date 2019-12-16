@@ -1,0 +1,255 @@
+<html>
+<head>
+	<!-- Bootstrap core CSS-->
+	<link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+	<!-- Custom fonts for this template-->
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" type="text/css">
+
+	<!-- Page level plugin CSS-->
+	<link href="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.css')}}" rel="stylesheet">
+
+	<!-- Custom styles for this template-->
+	<link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
+	<link href="{{url_for('static', filename='css/mystyles.css')}}" rel="stylesheet">
+</head>
+<body>
+<form class="form" id="diagnosis">
+	<div class="form-row">
+		<div class="form-group col-md-8">
+			<h5>Antecedentes Patologicos Familiares</h5>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<div class="checkbox">
+				<label><input type="checkbox" id="padres_diab" value="padres">Padre o Madre diabeticos</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="2" id="abuelos_diab">Abuelos o Bisabuelos Diabeticos</label>
+			</div>
+			<div class="checkbox">
+				<label><input type="checkbox" value="3" id="murio_diab">Murió alguno de esos por Diabetes</label>
+			</div> 
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8">
+			<h5>Habitos Alimenticios</h5>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Forma de alimentarse</h6>
+			<label class="radio-inline"><input type="radio" value="0" name="formas_alimentarse">Buena</label>
+			<label class="radio-inline"><input type="radio" value="1" name="formas_alimentarse">Regular</label>
+			<label class="radio-inline"><input type="radio" value="2" name="formas_alimentarse">Mala</label>  
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Horario de Alimentarse</h6>
+			<label class="radio-inline"><input type="radio" id="horario_alimentarse" value="0" name="horario_alimentarse">Adecuado</label>
+			<label class="radio-inline"><input type="radio" id="horario_alimentarse" value="1" name="horario_alimentarse">Regular</label>
+			<label class="radio-inline"><input type="radio" id="horario_alimentarse" value="2" name="horario_alimentarse">No adecuado</label>  
+		</div>
+	</div> 
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Sedentarismo</h6>
+			<label class="radio-inline"><input type="radio" id="sedentarismo" name="sedentarismo" value="1">Si</label>
+			<label class="radio-inline"><input type="radio" id="sedentarismo" name="sedentarismo" value="0">No</label>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8">
+			<h5>Habitos Toxicos</h5>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Alcohol</h6>
+			<label class="radio-inline"><input type="radio" id="alcohol" name="alcohol" value="1">Si</label>
+			<label class="radio-inline"><input type="radio" id="alcohol" name="alcohol" value="0">No</label>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Café</h6>
+			<label class="radio-inline"><input type="radio" id="cafe" name="cafe" value="1">Si</label>
+			<label class="radio-inline"><input type="radio" id="cafe" name="cafe" value="0">No</label>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-8 offset-md-1">
+			<h6>Drogas</h6>
+			<label class="radio-inline"><input type="radio" id="drogas" name="drogas" value="1">Si</label>
+			<label class="radio-inline"><input type="radio" id="drogas" name="drogas" value="0">No</label>
+		</div>
+	</div>
+	<button id="btnPreDiagnosis" class="btn btn-chulo">Resultados</button>
+</form>
+
+<!-- Result Modal-->
+<div class="modal fade" id="resultados_pre" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" id="exampleModalLabel">Resultados</h3>
+				<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body" id="body-modal2">
+				<canvas id="oilCanvas" width="400" height="600"></canvas>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+				<button class="btn btn-chulo" type="button" data-dismiss="modal">Aceptar</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+	<!-- Page level plugin JavaScript-->
+	<script src="{{url_for('static', filename='vendor/chart.js/Chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/jquery.dataTables.js')}}"></script>
+	<script src="{{url_for('static', filename='vendor/datatables/dataTables.bootstrap4.js')}}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="{{url_for('static', filename='js/sb-admin.min.js')}}"></script>
+
+	<!-- Demo scripts for this page-->
+	<script src="{{url_for('static', filename='js/demo/datatables-demo.js')}}"></script>
+	<script src="{{url_for('static', filename='js/demo/chart-area-demo.js')}}"></script>
+
+	<script src="{{url_for('static', filename='js/Chart.bundle.js')}}"></script>
+	<script src="{{url_for('static', filename='js/Chart.js')}}"></script>
+
+<script type="text/javascript">
+
+
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    var formas_alim = "";
+    var horario_alim = "";
+    var sedentarismo = "";
+    var alcohol = "";
+    var cafe = "";
+    var drogas = "";
+
+    function cargarGrafico(valor1, valor2){
+
+    	var oilCanvas = document.getElementById("oilCanvas");
+    	Chart.defaults.global.defaultFontFamily = "Lato";
+		Chart.defaults.global.defaultFontSize = 18;
+
+		var oilData = {
+		    labels: [
+		        "Posiblemente si es Diabetico",
+		        "Posiblemente no es Diabetico",
+		    ],
+		    datasets: [
+		        {
+		            data: [valor1, valor2],
+		            backgroundColor: [
+		                "#2ec49d",
+		                "#eeeeee",
+		            ]
+		        }
+		    ]
+		};
+
+		var pieChart = new Chart(oilCanvas, {
+ 			type: 'pie',
+  			data: oilData
+  		});
+    }
+
+    $(document).ready(function(){
+
+        $("input[name='formas_alimentarse']").click(function(event){
+            formas_alim = $(this).val();
+        });
+
+        $("input[name='horario_alimentarse']").click(function(event){
+            horario_alim = $(this).val();
+        });
+
+        $("input[name='sedentarismo']").click(function(event){
+            sedentarismo = $(this).val();
+        });
+
+        $("input[name='alcohol']").click(function(event){
+            alcohol = $(this).val();
+        });
+
+        $("input[name='cafe']").click(function(event){
+            cafe = $(this).val();
+        });
+
+        $("input[name='drogas']").click(function(event){
+            drogas = $(this).val();
+        });
+
+        $("#btnPreDiagnosis").on("click", function(ev){
+            ev.preventDefault();
+            
+            var padres_diab  = $("#padres_diab").prop("checked");
+            var abuelos_diab = $("#abuelos_diab").prop("checked");
+            var murio_diab   = $("#murio_diab").prop("checked");
+
+            /*alert("Drogas: " + drogas);
+            alert("Cafe: " + cafe);
+            alert("ALcohol: " + alcohol);
+            alert("Sedentarismo: " + sedentarismo);
+            alert("Murio Diabetico: " + murio_diab);
+            alert("Abuelos Diabeticos: " + abuelos_diab);
+            alert("Padres Diabeticos: " + padres_diab);
+            alert("Horario Alimentarse: " + horario_alim);
+            alert("Formas alimentarse: " + formas_alim);*/
+
+            if(sedentarismo != "" && alcohol != "" && cafe != "" && drogas != "" && horario_alim != "" && formas_alim != ""){
+                $.getJSON($SCRIPT_ROOT + '/save_prediagnosis', {
+                	murio_dia: murio_diab,
+                	padres_dia: padres_diab,
+                	abuelos_dia: abuelos_diab,
+                	horario_ali: horario_alim,
+                	formas_ali: formas_alim,
+                	sedentarism: sedentarismo,
+                	alcoho: alcohol,
+                	caf: cafe,
+                	droga: drogas
+                }, function(data)
+                {
+        			if(data.nerror == 1){
+        				$("#body-modal2").html("");
+        				$("#body-modal2").html("<h6>"+data.error+"</h6>");
+        			}else{
+        				cargarGrafico(data.v1, data.v2);
+        			}
+        			$("#resultados_pre").modal('show');
+                   
+                });
+              
+            }
+            else{
+            	$("#body-modal2").html("");
+        		$("#body-modal2").html("<h5>"+"Faltan Campos que llenar"+"<h5>");
+        		//cargarGrafico(0.6, 0.4)
+        		$("#resultados_pre").modal('show');
+
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

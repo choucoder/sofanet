@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Registrar Médico</title>
+
+    <!-- Bootstrap core CSS-->
+    <link href="{{url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/fontawesome-free/css/all.min.css')}}" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="{{url_for('static', filename='css/sb-admin.css')}}" rel="stylesheet">
+    <link href="{{url_for('static', filename='css/mystyles.css')}}" rel="stylesheet">
+  </head>
+
+  <body class="bg-dark">
+
+    <div class="container">
+      <div class="card card-register mx-auto mt-5">
+        <div class="card-header">Register an Account</div>
+        <div class="card-body">
+
+          <form method="POST" action="/register">
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="cedula" class="form-control" placeholder="Cedula" required="required" autofocus="autofocus" name="cedula">
+                    <label for="cedula">Cedula</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="numero_ss" class="form-control" placeholder="Numero SS" required="required" name="numero_ss">
+                    <label for="numero_ss">Numero SS</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="firstName" class="form-control" placeholder="First name" required="required" autofocus="autofocus" name="primer_nombre">
+                    <label for="firstName">Primer nombre</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="lastName" class="form-control" placeholder="Last name" required="required" name="primer_apellido">
+                    <label for="lastName">Primer apellido</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="text" id="fechaNac" class="form-control" placeholder="/dd/mm/yy" required="required" name="fecha_nacimiento">
+                    <label for="fechaNac">Fecha nacimiento</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                    <select id="inputState" class="form-control" name="sexo">
+                      <option selected>Sexo</option>
+                      <option>Hombre</option>
+                      <option>Mujer</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label-group">
+                <input id="direccion" class="form-control" placeholder="Dirección" required="required" name="direccion">
+                <label for="direccion">Dirección</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="password" id="password" class="form-control" placeholder="Password" required="required" name="password">
+                    <label for="password">Password</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-label-group">
+                    <input type="password" id="confirm_password" class="form-control" placeholder="Confirm password" required="required" name="confirm_password">
+                    <label for="confirm_password">Confirm password</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <input type="submit" name="Registrar" value="Registrar" class="btn btn-chulo btn-block">
+          </form>
+          <div class="text-center">
+            <a class="d-block small mt-3" href="/login">Login Page</a>
+            <a class="d-block small" href="forgot-password.html">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+
+  </body>
+
+</html>
